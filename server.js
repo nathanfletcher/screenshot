@@ -4,8 +4,10 @@ const {screenshot} = require('./screenshot.js')
 
 const express = require('express');
 const puppeteer = require('puppeteer');
+var cors = require('cors');
 const app = express();
 
+app.use(cors());
 app.use(express.static('files'))
 app.use(screenshot);
 

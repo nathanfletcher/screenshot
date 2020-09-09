@@ -32,16 +32,27 @@ exports.screenshot = async (req, res) => {
         page = await browser.newPage();
     }
 
+    
+    
+    await page.emulateMediaType('screen');
     await page.setViewport({width, height});
-    await page.goto(url);
     
-    const imageBuffer = await page.pdf({path: "files/"+filename, format: 'A4'});
-    
-    if(json){
-        res.json({downloadUrl : `${process.env.SITE_URL}/${filename}`})
+    await page.goto(url,{waitUntil:"networkidle2"});
+
+    if(req.query.pdf){
+        console.log("WE are renering a pdf")
+        const imageBuffer = await page.pdf({path: "files/"+filename, format: 'A4'});
+        if(json){
+            res.json({downloadUrl : `${String(process.env.SITE_URL)}/${filename}`, location:`${filename}`})
+        }
+        else{
+            res.set('Content-Type', 'application/pdf');
+            res.send(imageBuffer);
+        }
     }
     else{
-        res.set('Content-Type', 'application/pdf');
+        const imageBuffer = await page.screenshot({path: "files/image.png", fullPage: true});
+        res.set('Content-Type', 'image/png');
         res.send(imageBuffer);
     }
     
