@@ -13,6 +13,8 @@ Run with `docker run -p 8080:8080 gcr.io/as-a-service-dev/screenshot`
 * `url`: The URL of the website to screenshot
 * (`width`): The viewport width (in pixels), defaults to 1280
 * (`height`): The viewport height (in pixels), defaults to 800
+* (`pdf`): [boolean] If you want the file served as a pdf, defaults to false
+* (`json`): [boolean] If you would want a json of the url of the file instead, defaults to false.
 
 Example: `/?url=https://steren.fr`
 
