@@ -13,6 +13,9 @@ let page;
  */
 exports.screenshot = async (req, res) => {
     const url = req.query.url;
+    const json = req.query.json || false;
+    const filename = req.query.reportID ? `report-${req.query.reportID}.pdf` : `report-${Math.random()*100}.pdf`
+
     if (!url) {
       return res.send('Please provide URL as GET parameter, for example: <a href="?url=https://example.com">?url=https://example.com</a>');
     }
@@ -31,9 +34,16 @@ exports.screenshot = async (req, res) => {
 
     await page.setViewport({width, height});
     await page.goto(url);
-    const imageBuffer = await page.screenshot();
-  
-    res.set('Content-Type', 'image/png');
-    res.send(imageBuffer);
+    
+    const imageBuffer = await page.pdf({path: "files/"+filename, format: 'A4'});
+    
+    if(json){
+        res.json({downloadUrl : `${process.env.SITE_URL}/${filename}`})
+    }
+    else{
+        res.set('Content-Type', 'application/pdf');
+        res.send(imageBuffer);
+    }
+    
   };
   

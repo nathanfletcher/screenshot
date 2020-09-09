@@ -6,7 +6,9 @@ const express = require('express');
 const puppeteer = require('puppeteer');
 const app = express();
 
+app.use(express.static('files'))
 app.use(screenshot);
+
 
 const server = app.listen(process.env.PORT || 8080, err => {
     if (err) return console.error(err);
